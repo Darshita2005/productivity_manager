@@ -8,8 +8,8 @@
 ![image](https://github.com/user-attachments/assets/a92a1e0d-abd3-4d7a-a992-b1843d54905a)
 ![image](https://github.com/user-attachments/assets/a2f080e4-c3e9-4408-a44b-52399ede84aa)
 
-Team 
-members:
+**Tech Titans**
+Team members:
 Darshita Bansal (AD@$B1017)
 Vaidehi Vijay (CS24B1059)
 
