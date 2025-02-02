@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity and To-Do List Manager</title></title>
+    <style>
+        body {
+    transition: background 0.3s, color 0.3s;
+}
+
+.header {
+    font-family: cambria, serif;
+    font-size: 20px;
+    padding: 0.2px 10px;
+    padding-bottom: 10px;
+    text-align:center;
+    background-color: darkslategray;
+    color: peachpuff;
+    position: relative;
+}
+
+.light-mode {
+    background: #ffffff;
+    color: #000000;
+}
+.dark-mode {
+    background: #121212;
+    color: #ffffff;
+}
+.toggle-btn {
+    border: none;
+    cursor: pointer;
+    margin: 1px;
+    font-size: 36px;
+}
+
+.toggle {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.one {
+    background-image:  linear-gradient(90deg, rgba(101,107,137,0.75), rgba(64,224,208,0.4)), url(https://media.istockphoto.com/id/1285308242/photo/to-do-list-text-on-notepad.jpg?s=612x612&w=0&k=20&c=p85bCVQZwvkrqqqNOJGg2QuPDu6ynTlQHkASQOTELh8=);
+    background-size: cover;
+    margin: 0;
+}
+
+.todo-list {
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    background-color: rgba(255,218,185,0.7);
+  margin-top: 10px;
+  font-size: 25px;
+  margin-bottom: 20px; 
+  border-color: rgba(36,36,36,0.4);
+  box-shadow: 1px 1px 1px 1px gray;
+  border-radius: 30px 10px;
+  color: rgb(36,36,36);
+  font-family: monospace;
+}
+
+.todo-list button {
+    width: 300px;
+    height: 100px;
+}
+    </style>
+</head>
+<body class="light-mode">
+    <header class="header">
+    <section class="toggle">
+    <button class="toggle-btn" onclick="toggleMode()">☽/☀︎</button>
+
+    <script>
+        function toggleMode() {
+            const body = document.body;
+            body.classList.toggle("dark-mode");
+            body.classList.toggle("light-mode");
+        }
+    </script></section>
+  
+        <h1>Productivity and To-Do List Manager</h1>
+        <p>"<i>The <b>best preparation</b> for tomorrow is doing your best today.</i>" — H. Jackson Brown Jr.</p>
+    </header>
+    <div class="one">
+    <main>
+        <section class="todo-list">
+            <a href="todo_list_final.html">
+                <button id="todo-page-btn">To-Do List</button>
+            </a>
+        </section>
+        <section class="todo-list">
+            <a href="calendar_final.html" >
+                <button id="calender-events">Calender and Events</button>
+            </a>
+        </section>
+        <section class="todo-list">
+            <a href="https://www.google.com/search?q=weather+conditions+&sca_esv=f4447c646f0a5466&rlz=1C1GCEA_enIN1114IN1114&sxsrf=AHTn8zrjjLZnY88gzEyquLKoK55oZlafDA%3A1738495162833&ei=ulSfZ8jKMuOW4-EPv7edoQY&ved=0ahUKEwjIj_-U76SLAxVjyzgGHb9bJ2QQ4dUDCBE&uact=5&oq=weather+conditions+&gs_lp=Egxnd3Mtd2l6LXNlcnAiE3dlYXRoZXIgY29uZGl0aW9ucyAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdIxwZQuQJYgQRwAXgBkAEAmAEAoAEAqgEAuAEDyAEA-AEBmAIBoAIPmAMAiAYBkAYIkgcBMaAHAA&sclient=gws-wiz-serp" target="_blank">
+                <button id="weather">Weather Conditions</button>
+            </a>
+        </section>
+        <section class="todo-list">
+            <a href="goals_final.html">
+                <button id="goals">Goals</button>
+            </a>
+        </section>
+        <section class="todo-list">
+            <a href="progress_final.html">
+                <button id="progress">Progress</button>
+            </a>
+        </section>
+    </main>
+  </div>
+  <footer class="header">Thank You for visiting our website.<br>Have a GOOD DAY!!</footer>
+</body>
+</html>

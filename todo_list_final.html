@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: monospace, sans-serif;
+            background: linear-gradient(90deg, rgba(66, 150, 247, 0.3), rgba(65, 234, 234, 0.3)), url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTklNCRaoYjrsD2vnIPTrSTc8JE_lna45PxzQ&s);
+            backdrop-filter: blur(1px);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 50px;
+        }
+
+        .todo-container {
+            width: 500px;
+            background: rgba(144, 182, 248, 0.7);
+            padding: 30px;
+            border-radius: 12px 30px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 50px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: rgb(237, 240, 248);
+            color: rgb(63, 28, 234);
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 19px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        input[type="number"] {
+            width: 45px;
+            padding: 5px;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.8);
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        li:hover {
+            background-color: #dfe6e9;
+            transform: scale(1.02);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-container">
+        <h1>📝 Task Manager</h1>
+        <div class="input-container">
+            <input type="text" id="taskInput" placeholder="Enter a new task">
+            <button onclick="addTask()">Add</button>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadTasks); 
+
+        function addTask() {
+            let input = document.getElementById("taskInput");
+            let taskText = input.value.trim();
+
+            if (taskText === "") {
+                alert("Please enter a task!");
+                return;
+            }
+
+            let taskObj = {
+                id: Date.now(), 
+                text: taskText,
+                completed: false,
+                hours: "",
+                minutes: ""
+            };
+
+            let li = createTaskElement(taskObj);
+            document.getElementById("taskList").appendChild(li);
+
+            input.value = "";
+            saveTasks(); 
+        }
+
+        function createTaskElement(taskObj) {
+            let li = document.createElement("li");
+            li.setAttribute("data-id", taskObj.id); 
+
+            let checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = taskObj.completed;
+            checkbox.addEventListener("change", function() {
+                taskObj.completed = this.checked;
+                li.classList.toggle("completed", this.checked);
+                saveTasks();
+            });
+
+            let taskSpan = document.createElement("span");
+            taskSpan.textContent = taskObj.text;
+
+            let hourInput = document.createElement("input");
+            hourInput.type = "number";
+            hourInput.placeholder = "Hrs";
+            hourInput.min = "0";
+            hourInput.value = taskObj.hours;
+            hourInput.addEventListener("input", function() {
+                taskObj.hours = this.value;
+                saveTasks();
+            });
+
+            let minInput = document.createElement("input");
+            minInput.type = "number";
+            minInput.placeholder = "Min";
+            minInput.min = "0";
+            minInput.max = "59";
+            minInput.value = taskObj.minutes;
+            minInput.addEventListener("input", function() {
+                taskObj.minutes = this.value;
+                saveTasks();
+            });
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "❌";
+            deleteBtn.classList.add("delete-btn");
+            deleteBtn.onclick = function() {
+                li.remove();
+                deleteTask(taskObj.id);
+            };
+
+            li.appendChild(checkbox);
+            li.appendChild(taskSpan);
+            li.appendChild(hourInput);
+            li.appendChild(minInput);
+            li.appendChild(deleteBtn);
+            li.classList.toggle("completed", taskObj.completed);
+
+            return li;
+        }
+
+        function saveTasks() {
+            let tasks = [];
+            document.querySelectorAll("#taskList li").forEach(li => {
+                let inputs = li.querySelectorAll("input[type='number']");
+                tasks.push({
+                    id: parseInt(li.getAttribute("data-id")), 
+                    text: li.querySelector("span").textContent,
+                    completed: li.querySelector("input[type='checkbox']").checked,
+                    hours: inputs[0].value, 
+                    minutes: inputs[1].value 
+                });
+            });
+
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            let storedTasks = localStorage.getItem("tasks");
+            if (!storedTasks) return;
+
+            let tasks = JSON.parse(storedTasks);
+            let taskList = document.getElementById("taskList");
+            taskList.innerHTML = ""; 
+
+            tasks.forEach(taskObj => {
+                let li = createTaskElement(taskObj);
+                taskList.appendChild(li);
+            });
+        }
+
+        function deleteTask(taskId) {
+            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks = tasks.filter(task => task.id !== taskId); 
+            localStorage.setItem("tasks", JSON.stringify(tasks)); 
+        }
+    </script>
+
+    <a href="codesoc_final.html" style="text-decoration: none;">
+        <button style="background: #6c757d; color: white; padding: 10px; border-radius: 5px; margin: 10px; border: none; cursor: pointer;">
+            ⬅ Back to previous page
+        </button>
+    </a>
+
+</body>
+</html>

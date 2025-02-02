@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List with Goals</title>
+    <style>
+        body {
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    background-image: url(https://images.unsplash.com/photo-1541140134513-85a161dc4a00?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JleSUyMHRleHR1cmV8ZW58MHx8MHx8fDA%3D);
+    background-size:cover;
+    text-align: center;
+
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: rgba(64, 63, 62, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    background: #eee;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+input[type="text"] {
+    padding: 5px;
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+button {
+    background-color: #273038;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+button:hover {
+    background-color: #19f5e3;
+}
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
+
+h2 {
+    font-size: 40px;
+}
+    </style>
+        
+</head>
+<body>
+
+    
+    <div class="container">
+        <h2>Today's Goals</h2>
+        <input type="text" id="taskInput" placeholder="Enter a new task">
+        <button onclick="addTask('taskList')">Add Task</button>
+        <ul id="taskList">
+            
+        </ul>
+    </div>
+
+   
+    <div class="container">
+        <h2>Weekly Targets</h2>
+        <input type="text" id="weeklyInput" placeholder="Enter a weekly goal">
+        <button onclick="addTask('weeklyList')">Add Goal</button>
+        <ul id="weeklyList">
+            
+        </ul>
+    </div>
+
+    
+    <div class="container">
+        <h2>Monthly Targets</h2>
+        <input type="text" id="monthlyInput" placeholder="Enter a monthly goal">
+        <button onclick="addTask('monthlyList')">Add Goal</button>
+        <ul id="monthlyList">
+            
+        </ul>
+    </div>
+    <script>
+        
+    document.addEventListener("DOMContentLoaded", loadTasks); 
+
+function addTask(listId) {
+    let input = document.getElementById(listId.replace("List", "Input"));
+    let taskText = input.value.trim();
+
+    if (taskText === "") {
+        alert("Please enter a task or goal!");
+        return;
+    }
+
+    let li = createTaskElement(taskText, listId, false);
+    document.getElementById(listId).appendChild(li);
+    
+    input.value = ""; 
+    saveTasks(); 
+}
+
+function createTaskElement(taskText, listId, completed) {
+    let li = document.createElement("li");
+
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = completed;
+    checkbox.addEventListener("change", function() {
+        li.classList.toggle("completed", this.checked);
+        saveTasks();
+    });
+
+    
+    let taskSpan = document.createElement("span");
+    taskSpan.textContent = taskText;
+
+
+    let deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "✖";
+    deleteBtn.style.marginLeft = "10px";
+    deleteBtn.onclick = function() {
+        li.remove();
+        saveTasks();
+    };
+
+
+    li.appendChild(checkbox);
+    li.appendChild(taskSpan);
+    li.appendChild(deleteBtn);
+    li.classList.toggle("completed", completed);
+    return li;
+}
+
+
+function saveTasks() {
+    let allTasks = {
+        taskList: getTasks("taskList"),
+        weeklyList: getTasks("weeklyList"),
+        monthlyList: getTasks("monthlyList"),
+    };
+
+    localStorage.setItem("tasks", JSON.stringify(allTasks));
+}
+
+function getTasks(listId) {
+    let tasks = [];
+    document.querySelectorAll(`#${listId} li`).forEach(li => {
+        tasks.push({
+            text: li.querySelector("span").textContent,
+            completed: li.querySelector("input[type='checkbox']").checked
+        });
+    });
+    return tasks;
+}
+
+
+function loadTasks() {
+    let storedTasks = localStorage.getItem("tasks");
+    if (!storedTasks) return;
+
+    let allTasks = JSON.parse(storedTasks);
+    
+    Object.keys(allTasks).forEach(listId => {
+        let listElement = document.getElementById(listId);
+        if (!listElement) return;
+
+        allTasks[listId].forEach(task => {
+            let li = createTaskElement(task.text, listId, task.completed);
+            listElement.appendChild(li);
+        });
+    });
+}
+
+    </script>
+     <a href="codesoc_final.html" style="text-decoration: none;">
+        <button style="background: #6c757d; color: white; padding: 12px; border-radius: 5px; border: none; cursor: pointer; font-size: 16px;">
+            ⬅ Back to Previous Page
+        </button>
+    </a>
+
+</body>
+</html>
